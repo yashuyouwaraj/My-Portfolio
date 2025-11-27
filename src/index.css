@@ -185,9 +185,10 @@ body {
   }
 
   #terminal {
-    width: 28rem;
+    width: 50rem;
     @apply absolute top-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
-    left: 8.333%;
+    left: 5%;
+    max-height: 70vh;
   }
 
   #terminal h2 {
@@ -196,6 +197,8 @@ body {
 
   #terminal .techstack {
     @apply text-sm font-roboto p-5;
+    max-height: calc(70vh - 60px);
+    overflow-y: auto;
   }
 
   #terminal .techstack .label {
@@ -734,6 +737,34 @@ body {
     @apply bg-slate-950 border border-slate-700/50;
   }
 
+  :root.dark #safari .search {
+    @apply bg-slate-900 border-slate-700;
+  }
+
+  :root.dark #safari .search input {
+    @apply bg-slate-900 text-white placeholder:text-slate-400;
+  }
+
+  :root.dark #safari .blog {
+    @apply bg-slate-950 text-white;
+  }
+
+  :root.dark #safari .blog h2 {
+    @apply text-pink-400;
+  }
+
+  :root.dark #safari .blog .blog-post .content p {
+    @apply text-slate-400;
+  }
+
+  :root.dark #safari .blog .blog-post .content h3 {
+    @apply text-slate-100;
+  }
+
+  :root.dark #safari .blog .blog-post .content a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+
   :root.dark #finder {
     @apply bg-slate-900/90 border border-slate-700/50;
   }
@@ -822,41 +853,64 @@ body {
     @apply bg-slate-900/90 border border-slate-700/50;
   }
 
-  :root.dark #archive .sidebar {
+  :root.dark #archive .achievements-finder-layout {
+    @apply flex h-full;
+  }
+
+  :root.dark #archive .achievements-finder-layout .sidebar {
     @apply bg-slate-950 border-r border-slate-700;
   }
 
-  :root.dark #archive .sidebar h3 {
+  :root.dark #archive .achievements-finder-layout .sidebar h3 {
     @apply text-slate-400;
   }
 
-  :root.dark #archive .sidebar .active {
-    @apply bg-blue-600 text-white;
-  }
-
-  :root.dark #archive .sidebar .not-active {
-    @apply text-slate-300 hover:bg-slate-800;
-  }
-
-  :root.dark #archive .sidebar li {
+  :root.dark #archive .achievements-finder-layout .sidebar ul li {
     @apply text-slate-200;
   }
 
-  :root.dark #archive .achievements-content {
+  :root.dark #archive .achievements-finder-layout .sidebar ul li .active {
+    @apply bg-blue-600 text-white;
+  }
+
+  :root.dark #archive .achievements-finder-layout .sidebar ul li.active {
+    @apply bg-blue-600 text-white;
+  }
+
+  :root.dark #archive .achievements-finder-layout .sidebar ul li.not-active {
+    @apply text-slate-300 hover:bg-slate-800;
+  }
+
+  :root.dark #archive .achievements-finder-layout .achievements-content {
     @apply bg-slate-900 text-white;
   }
 
-  :root.dark #archive .achievements-content .achievement-card {
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-grid .achievement-card {
     @apply border-slate-700 bg-slate-800 text-white hover:bg-slate-700 hover:border-blue-500;
   }
 
-  :root.dark #archive .achievements-content .achievement-card h4,
-  :root.dark #archive .achievements-content .achievement-title {
-    color: white;
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-grid .achievement-card.selected {
+    @apply bg-blue-600 border-blue-400;
   }
 
-  :root.dark #archive .achievements-content .achievement-date {
-    color: rgb(148, 163, 184);
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-grid .achievement-card .achievement-title {
+    @apply text-white;
+  }
+
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-grid .achievement-card .achievement-date {
+    @apply text-slate-400;
+  }
+
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-grid .achievement-card .achievement-card-actions .btn.btn-primary {
+    @apply bg-blue-500 text-white hover:bg-blue-600;
+  }
+
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-empty {
+    @apply text-slate-100;
+  }
+
+  :root.dark #archive .achievements-finder-layout .achievements-content .achievements-empty p {
+    @apply text-slate-300;
   }
 
   :root.dark #window-controls .window-control-btn {
