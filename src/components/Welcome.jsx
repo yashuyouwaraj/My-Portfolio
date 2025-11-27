@@ -22,40 +22,48 @@ const renderText = (text, className, baseWeight = 400) => {
 const setupTextHover = (container, type) => {
   if (!container) return ()=>{};
 
-  const letters=container.querySelectorAll("span")
+  const letters = container.querySelectorAll("span");
+  if (letters.length === 0) return ()=>{};
 
   const { min, max, default: base } = FONT_WEIGHTS[type];
 
   const animateLetter = (letter, weight, duration = 0.25) => {
-    return gsap.to(letter, {
+    gsap.to(letter, {
       duration,
       ease: "power2.out",
       fontVariationSettings: `'wght' ${weight}`,
+      overwrite: "auto"
     });
   };
 
   const handleMouseMove = (e) => {
-    const {left} = container.getBoundingClientRect()
-    const mouseX=e.clientX - left
+    const rect = container.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
 
-    letters.forEach((letter)=>{
-        const {left:l , width:w} =letter.getBoundingClientRect()
-        const distance=Math.abs(mouseX-(l-left+w/2))
-        const intensity=Math.exp(-(distance**2)/20000)
+    letters.forEach((letter) => {
+      const letterRect = letter.getBoundingClientRect();
+      const letterCenterX = letterRect.left - rect.left + letterRect.width / 2;
+      const distance = Math.abs(mouseX - letterCenterX);
+      const intensity = Math.exp(-(distance ** 2) / 15000);
+      const weight = min + (max - min) * intensity;
 
-        animateLetter(letter,min+(max-min)*intensity)
-    })
+      animateLetter(letter, weight, 0.1);
+    });
   };
 
-  const handleMouseLeave=()=>letters.forEach((letter)=>animateLetter(letter,base,0.3))
+  const handleMouseLeave = () => {
+    letters.forEach((letter) => {
+      animateLetter(letter, base, 0.3);
+    });
+  };
 
-  container.addEventListener("mousemove",handleMouseMove)
-  container.addEventListener("mouseleave",handleMouseLeave)
+  container.addEventListener("mousemove", handleMouseMove);
+  container.addEventListener("mouseleave", handleMouseLeave);
 
-  return ()=>{
-    container.removeEventListener("mousemove",handleMouseMove)
-    container.removeEventListener("mouseleave",handleMouseLeave)
-  }
+  return () => {
+    container.removeEventListener("mousemove", handleMouseMove);
+    container.removeEventListener("mouseleave", handleMouseLeave);
+  };
 };
 
 const Welcome = () => {
@@ -63,26 +71,28 @@ const Welcome = () => {
   const subtitleRef = useRef(null)
   
   useGSAP(()=>{
+    if (!titleRef.current || !subtitleRef.current) return;
+    
     const titleCleanup=setupTextHover(titleRef.current,"title")
     const subtitleCleanup=setupTextHover(subtitleRef.current,"subtitle")
 
     return ()=>{
-        subtitleCleanup()
         titleCleanup()
+        subtitleCleanup()
     }
-  },[])
+  })
 
   return (
     <section id="welcome">
       <p ref={subtitleRef}>
         {renderText(
           "Hey, I'm Yashu! Welcome to my",
-          "text-3xl font-georama",
+          "text-3xl font-georama text-white",
           100
         )}
       </p>
       <h1 ref={titleRef} className="mt-7">
-        {renderText("portfolio", "text-9xl italic font-georama")}
+        {renderText("portfolio", "text-9xl italic font-georama text-white")}
       </h1>
 
       <div className="small-screen">
