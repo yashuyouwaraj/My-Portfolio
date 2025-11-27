@@ -635,6 +635,23 @@ body {
     left: 0;
   }
 
+  section[data-maximized="true"]#finder {
+    @apply bg-white;
+    width: 100%;
+    height: 100%;
+  }
+
+  section[data-maximized="true"]#finder .sidebar {
+    @apply bg-gray-50;
+  }
+
+  section[data-maximized="true"]#finder .content {
+    @apply bg-white;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+
   /* Dark Mode Styles */
 
   :root.dark {
@@ -951,5 +968,20 @@ body {
 
   :root.dark #home li {
     @apply hover:brightness-125;
+  }
+
+  :root.dark section[data-maximized="true"]#finder {
+    background-color: #0f172a;
+  }
+
+  :root.dark section[data-maximized="true"]#finder .sidebar {
+    background-color: #020617;
+  }
+
+  :root.dark section[data-maximized="true"]#finder .content {
+    background-color: #0f172a;
+    width: 100%;
+    height: 100%;
+    max-width: none;
   }
 }
