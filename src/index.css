@@ -721,6 +721,10 @@ body {
     @apply bg-slate-900/90 text-white border border-slate-700/50;
   }
 
+  :root.dark #contact > div {
+    @apply bg-slate-900;
+  }
+
   :root.dark #contact h2 {
     @apply text-white;
   }
@@ -821,6 +825,10 @@ body {
     @apply bg-slate-900/90 border border-slate-700/50;
   }
 
+  :root.dark #resume .react-pdf__Page {
+    @apply bg-slate-800;
+  }
+
   :root.dark #txtfile {
     @apply bg-slate-900/90 text-white border border-slate-700/50;
   }
@@ -846,7 +854,7 @@ body {
   }
 
   :root.dark #imgfile .preview {
-    @apply bg-slate-800;
+    @apply bg-slate-800 p-2 max-h-[70vh];
   }
 
   :root.dark #archive {

@@ -105,7 +105,7 @@ const AchievementsWindowContent = () => {
         <h2>Achievements</h2>
       </div>
 
-      <div className="bg-white flex h-full achievements-finder-layout">
+      <div className="bg-white dark:bg-slate-900 flex h-full achievements-finder-layout">
         {/* Sidebar */}
         <div className="sidebar">
           {renderSidebarCategory("Categories", "categories")}

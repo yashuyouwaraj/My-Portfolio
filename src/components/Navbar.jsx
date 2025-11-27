@@ -5,8 +5,20 @@ import ThemeToggle from "./ThemeToggle";
 import dayjs from "dayjs";
 
 const Navbar = () => {
-  const {openWindow}=useWindowStore()
+  const {openWindow, closeWindow, windows}=useWindowStore()
   const {isDarkMode} = useThemeStore()
+
+  const handleNavItemClick = (type) => {
+    // Check if window is already open
+    if (windows[type]?.isOpen) {
+      // Close it on second click
+      closeWindow(type)
+    } else {
+      // Open it on first click
+      openWindow(type)
+    }
+  }
+
   return (
     <nav className={isDarkMode ? "dark-nav" : ""}>
       <div>
@@ -15,7 +27,7 @@ const Navbar = () => {
 
         <ul>
           {navLinks.map(({ id, name ,type}) => (
-            <li key={id} onClick={()=>openWindow(type)}>
+            <li key={id} onClick={()=>handleNavItemClick(type)}>
               <p>{name}</p>
             </li>
           ))}
