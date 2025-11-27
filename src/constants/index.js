@@ -68,7 +68,7 @@ const dockApps = [
   },
   {
     id: "archive",
-    name: "Archive", // was "Trash"
+    name: "Achievements", // changed from "Archive"
     icon: "trash.png",
     canOpen: true,
   },
@@ -502,6 +502,7 @@ const WINDOW_CONFIG = {
   txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, isMinimized: false, isMaximized: false, maximizeData: null, positionX: 0, positionY: 0, width: 0, height: 0 },
   imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, isMinimized: false, isMaximized: false, maximizeData: null, positionX: 0, positionY: 0, width: 0, height: 0 },
   archive: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, isMinimized: false, isMaximized: false, maximizeData: null, positionX: 0, positionY: 0, width: 0, height: 0 },
+  achievementpdf: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, isMinimized: false, isMaximized: false, maximizeData: null, positionX: 0, positionY: 0, width: 0, height: 0 },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

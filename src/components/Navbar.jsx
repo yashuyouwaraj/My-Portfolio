@@ -1,11 +1,14 @@
 import { navIcons, navLinks } from "#constants";
 import useWindowStore from "#store/window";
+import useThemeStore from "#store/theme";
+import ThemeToggle from "./ThemeToggle";
 import dayjs from "dayjs";
 
 const Navbar = () => {
   const {openWindow}=useWindowStore()
+  const {isDarkMode} = useThemeStore()
   return (
-    <nav>
+    <nav className={isDarkMode ? "dark-nav" : ""}>
       <div>
         <img src="/images/logo.svg" alt="logo" />
         <p className="font-bold">Yashu's Portfolio</p>
@@ -19,8 +22,9 @@ const Navbar = () => {
         </ul>
       </div>
       <div>
+        <ThemeToggle />
         <ul>
-            {navIcons.map(({id,img})=>(
+            {navIcons.filter(({id}) => id !== 4).map(({id,img})=>(
                 <li key={id}>
                     <img src={img} alt={`icon-${id}`} className="icon-hover" />
                 </li>

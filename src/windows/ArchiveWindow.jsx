@@ -1,202 +1,164 @@
 /**
- * ArchiveWindow Component
- * Displays a trash/archive window with ability to manage archived files
- * Behaves like a standard window with minimize/maximize/close functionality
+ * AchievementsWindow Component
+ * Displays achievements as PDFs organized by categories (Certifications, Publications)
+ * Layout similar to Finder window with sidebar categories
  */
 
 import { WindowControls } from "#components";
 import WindowWrapper from "#hoc/WindowWrapper";
 import useWindowStore from "#store/window";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-const ArchiveWindowContent = () => {
-  const { windows } = useWindowStore();
-  const [archivedItems, setArchivedItems] = useState([
+const achievementsByCategory = {
+  certifications: [
     {
       id: 1,
-      name: "Old Project.zip",
-      type: "Archive",
-      dateArchived: "Nov 20, 2025",
-      size: "245 MB",
+      name: "React Master",
+      file: "sample1.pdf",
+      dateEarned: "Nov 20, 2025",
+      icon: "📜",
     },
     {
       id: 2,
-      name: "Unused Component.jsx",
-      type: "File",
-      dateArchived: "Nov 18, 2025",
-      size: "12 KB",
+      name: "JavaScript Pro",
+      file: "sample2.pdf",
+      dateEarned: "Nov 18, 2025",
+      icon: "📜",
     },
     {
       id: 3,
-      name: "Backup Database",
-      type: "Folder",
-      dateArchived: "Nov 15, 2025",
-      size: "1.2 GB",
+      name: "Web Development",
+      file: "sample3.pdf",
+      dateEarned: "Nov 15, 2025",
+      icon: "📜",
     },
-  ]);
+  ],
+  publications: [
+    {
+      id: 4,
+      name: "How to Master React",
+      file: "sample1.pdf",
+      dateEarned: "Oct 10, 2025",
+      icon: "📄",
+    },
+    {
+      id: 5,
+      name: "GSAP Animation Guide",
+      file: "sample2.pdf",
+      dateEarned: "Sep 25, 2025",
+      icon: "📄",
+    },
+    {
+      id: 6,
+      name: "JavaScript Best Practices",
+      file: "sample3.pdf",
+      dateEarned: "Sep 05, 2025",
+      icon: "📄",
+    },
+  ],
+};
 
-  const listRef = useRef(null);
+const AchievementsWindowContent = () => {
+  const [activeCategory, setActiveCategory] = useState("certifications");
   const [selectedId, setSelectedId] = useState(null);
+  const { openWindow } = useWindowStore();
 
-  // Animation for list items on mount
-  useGSAP(() => {
-    if (!listRef.current) return;
+  const currentItems = achievementsByCategory[activeCategory] || [];
 
-    const items = listRef.current.querySelectorAll(".archive-item");
-
-    gsap.fromTo(
-      items,
-      { opacity: 0, x: -10 },
-      {
-        opacity: 1,
-        x: 0,
-        duration: 0.3,
-        stagger: 0.05,
-        ease: "power2.out",
-      }
-    );
-  }, [archivedItems]);
-
-  /**
-   * Handle delete archived item
-   */
-  const handleDelete = (id) => {
-    gsap.to(`#archive-item-${id}`, {
-      opacity: 0,
-      x: -20,
-      duration: 0.25,
-      ease: "power2.in",
-      onComplete: () => {
-        setArchivedItems(archivedItems.filter((item) => item.id !== id));
-      },
-    });
-  };
+  const renderSidebarCategory = (name, categoryKey) => (
+    <div key={categoryKey} className="mb-4">
+      <h3>{name}</h3>
+      <ul>
+        {Object.entries(achievementsByCategory).map(([key, items]) => (
+          <li
+            key={key}
+            onClick={() => {
+              setActiveCategory(key);
+              setSelectedId(null);
+            }}
+            className={key === activeCategory ? "active" : "not-active"}
+          >
+            <span className="icon">{key === "certifications" ? "🏆" : "📚"}</span>
+            <p className="text-sm font-medium truncate">
+              {key === "certifications" ? "Certifications" : "Publications"}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 
   /**
-   * Handle restore item (remove from archive)
+   * Handle open achievement PDF in dedicated window
    */
-  const handleRestore = (id) => {
-    gsap.to(`#archive-item-${id}`, {
-      opacity: 0,
-      x: 20,
-      duration: 0.25,
-      ease: "power2.in",
-      onComplete: () => {
-        setArchivedItems(archivedItems.filter((item) => item.id !== id));
-      },
-    });
-  };
-
-  /**
-   * Handle empty archive
-   */
-  const handleEmptyArchive = () => {
-    if (archivedItems.length === 0) return;
-
-    gsap.to(".archive-item", {
-      opacity: 0,
-      scale: 0.8,
-      y: -10,
-      duration: 0.3,
-      stagger: 0.05,
-      ease: "power2.in",
-      onComplete: () => {
-        setArchivedItems([]);
-      },
+  const handleOpenAchievement = (achievement) => {
+    openWindow("achievementpdf", {
+      name: achievement.name,
+      file: achievement.file,
     });
   };
 
   return (
-    <div className="archive-window-content">
-      {/* Header */}
+    <>
       <div id="window-header">
         <WindowControls target="archive" />
-        <h2>Archive</h2>
+        <h2>Achievements</h2>
       </div>
 
-      {/* Content */}
-      <div className="archive-window-body">
-        {/* Stats Bar */}
-        <div className="archive-stats">
-          <div className="stat">
-            <span className="label">Items:</span>
-            <span className="value">{archivedItems.length}</span>
-          </div>
-          {archivedItems.length > 0 && (
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={handleEmptyArchive}
-              title="Empty all archived items"
-            >
-              Empty Archive
-            </button>
-          )}
+      <div className="bg-white flex h-full achievements-finder-layout">
+        {/* Sidebar */}
+        <div className="sidebar">
+          {renderSidebarCategory("Categories", "categories")}
         </div>
 
-        {/* Items List */}
-        {archivedItems.length > 0 ? (
-          <div className="archive-list" ref={listRef}>
-            {archivedItems.map((item) => (
-              <div
-                key={item.id}
-                id={`archive-item-${item.id}`}
-                className={`archive-item ${selectedId === item.id ? "selected" : ""}`}
-                onClick={() => setSelectedId(item.id)}
-              >
-                {/* Item Icon */}
-                <div className="archive-item-icon">
-                  {item.type === "Archive" && <span className="icon">📦</span>}
-                  {item.type === "File" && <span className="icon">📄</span>}
-                  {item.type === "Folder" && <span className="icon">📁</span>}
-                </div>
+        {/* Content Area */}
+        <div className="achievements-content">
+          {currentItems.length > 0 ? (
+            <div className="achievements-grid">
+              {currentItems.map((achievement) => (
+                <div
+                  key={achievement.id}
+                  className={`achievement-card ${
+                    selectedId === achievement.id ? "selected" : ""
+                  }`}
+                  onClick={() => setSelectedId(achievement.id)}
+                >
+                  {/* Icon */}
+                  <div className="achievement-icon-wrapper">
+                    <span className="achievement-icon">{achievement.icon}</span>
+                  </div>
 
-                {/* Item Info */}
-                <div className="archive-item-info">
-                  <h4 className="archive-item-name">{item.name}</h4>
-                  <div className="archive-item-meta">
-                    <span className="type">{item.type}</span>
-                    <span className="size">{item.size}</span>
-                    <span className="date">{item.dateArchived}</span>
+                  {/* Info */}
+                  <div className="achievement-info">
+                    <h4 className="achievement-title">{achievement.name}</h4>
+                    <p className="achievement-date">{achievement.dateEarned}</p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="achievement-card-actions">
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenAchievement(achievement);
+                      }}
+                      title="Open achievement"
+                    >
+                      Open
+                    </button>
                   </div>
                 </div>
-
-                {/* Actions */}
-                <div className="archive-item-actions">
-                  <button
-                    className="btn btn-sm btn-primary"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRestore(item.id);
-                    }}
-                    title="Restore to original location"
-                  >
-                    Restore
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(item.id);
-                    }}
-                    title="Permanently delete"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="archive-empty">
-            <div className="empty-icon">🗑️</div>
-            <p>Archive is empty</p>
-            <small>Archived items will appear here</small>
-          </div>
-        )}
+              ))}
+            </div>
+          ) : (
+            <div className="achievements-empty">
+              <div className="empty-icon">📭</div>
+              <p>No items in this category</p>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -204,6 +166,6 @@ const ArchiveWindowContent = () => {
  * Wrap the content with WindowWrapper to get
  * all window functionality (minimize, maximize, dragging, etc.)
  */
-const ArchiveWindow = WindowWrapper(ArchiveWindowContent, "archive");
+const AchievementsWindow = WindowWrapper(AchievementsWindowContent, "archive");
 
-export default ArchiveWindow;
+export default AchievementsWindow;

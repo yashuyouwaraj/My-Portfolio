@@ -7,5 +7,6 @@ import ImageContent from "#windows/Image"
 import Contact from "#windows/Contact";
 import Photos from "#windows/Photos";
 import ArchiveWindow from "#windows/ArchiveWindow.jsx";
+import AchievementPDF from "#windows/AchievementPDF.jsx";
 
-export {Terminal,Safari,Resume,Finder,Text,ImageContent,Contact,Photos,ArchiveWindow};
+export {Terminal,Safari,Resume,Finder,Text,ImageContent,Contact,Photos,ArchiveWindow,AchievementPDF};

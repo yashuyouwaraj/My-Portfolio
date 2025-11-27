@@ -110,17 +110,26 @@ export const animateMaximize = (element, options = {}) => {
       top: rect.top,
     };
 
-    // Animate to fullscreen (0, 0 position, full viewport)
-    gsap.to(
-      element,
-      {
-        x: 0,
-        y: 0,
-        duration: duration,
-        ease: "power3.inOut",
-        onComplete: () => resolve(originalData),
-      }
-    );
+    // Force element into fixed positioning with explicit inline size/position
+    // so we can animate width/height/top/left without CSS rules colliding.
+    element.style.position = element.style.position || "fixed";
+    element.style.left = `${rect.left}px`;
+    element.style.top = `${rect.top}px`;
+    element.style.width = `${rect.width}px`;
+    element.style.height = `${rect.height}px`;
+    element.style.margin = "0";
+
+    // Animate to fullscreen using inline style properties
+    gsap.to(element, {
+      left: 0,
+      top: 0,
+      width: "100vw",
+      height: "100vh",
+      duration: duration,
+      ease: "power3.inOut",
+      overwrite: "auto",
+      onComplete: () => resolve(originalData),
+    });
   });
 };
 
@@ -140,17 +149,22 @@ export const animateRestoreFromMaximize = (element, originalData = {}, options =
   const restoreY = originalData.y !== undefined ? originalData.y : 0;
 
   return new Promise((resolve) => {
-    // Animate back to original position
-    gsap.to(
-      element,
-      {
-        x: restoreX,
-        y: restoreY,
-        duration: duration,
-        ease: "power3.inOut",
-        onComplete: resolve,
-      }
-    );
+    // Animate back to original size/position using stored rect data
+    const targetLeft = originalData.left !== undefined ? originalData.left : 0;
+    const targetTop = originalData.top !== undefined ? originalData.top : 0;
+    const targetWidth = originalData.width !== undefined ? `${originalData.width}px` : "auto";
+    const targetHeight = originalData.height !== undefined ? `${originalData.height}px` : "auto";
+
+    gsap.to(element, {
+      left: targetLeft,
+      top: targetTop,
+      width: targetWidth,
+      height: targetHeight,
+      duration: duration,
+      ease: "power3.inOut",
+      overwrite: "auto",
+      onComplete: resolve,
+    });
   });
 };
 

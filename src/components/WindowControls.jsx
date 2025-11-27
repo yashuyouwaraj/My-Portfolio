@@ -62,7 +62,7 @@ const WindowControls = ({ target }) => {
       }
       closeWindow(target);
     } catch (error) {
-      console.error("Error in handleClose:", error);
+      // Silently handle close errors
     } finally {
       isAnimatingRef.current = false;
     }
@@ -83,7 +83,7 @@ const WindowControls = ({ target }) => {
       }
       minimizeWindow(target);
     } catch (error) {
-      console.error("Error in handleMinimize:", error);
+      // Silently handle minimize errors
     } finally {
       isAnimatingRef.current = false;
     }
@@ -110,20 +110,31 @@ const WindowControls = ({ target }) => {
       if (isCurrentlyMaximized) {
         // Restore from maximized
         const originalData = windowState.maximizeData;
+        // Animate restore first, then clear inline styles and update store
         await animateRestoreFromMaximize(windowEl, originalData, {
           duration: 0.35,
         });
+
+        // Clear inline sizing/positioning applied for maximize so CSS/state can take over
+        windowEl.style.position = "";
+        windowEl.style.left = "";
+        windowEl.style.top = "";
+        windowEl.style.width = "";
+        windowEl.style.height = "";
+        windowEl.style.borderRadius = "";
+
         restoreFromMaximize(target);
       } else {
         // Maximize window - get the data from animation
         const originalData = await animateMaximize(windowEl, {
           duration: 0.35,
         });
-        // Pass the original data to the store action
+
+        // animation already set inline fixed/width/height; now update store with original data
         maximizeWindow(target, originalData);
       }
     } catch (error) {
-      console.error("Error in handleMaximize:", error);
+      // Silently handle maximize errors
     } finally {
       isAnimatingRef.current = false;
     }

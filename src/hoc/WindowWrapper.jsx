@@ -69,6 +69,14 @@ const WindowWrapper = (Component, windowKey) => {
       }
     };
 
+    // Add click handler to focus window when clicking anywhere on it
+    const handleWindowClick = (e) => {
+      if (isOpen && !isMinimized) {
+        focusWindow(windowKey);
+      }
+      handleMinimizedRestore(e);
+    };
+
     return (
       <section
         id={windowKey}
@@ -82,7 +90,7 @@ const WindowWrapper = (Component, windowKey) => {
           minHeight: "200px",
         }}
         className="absolute"
-        onClick={handleMinimizedRestore}
+        onClick={handleWindowClick}
       >
         <Component {...props} />
       </section>

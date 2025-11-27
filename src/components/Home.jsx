@@ -24,7 +24,7 @@ const Home = () => {
       <ul>
         {projects.map((project) => (
           <li
-            key={project}
+            key={project.id || project.name}
             className={clsx("group folder", project.windowPosition)}
             onClick={() => handleOpenProjectFinder(project)}
           >

@@ -2,6 +2,19 @@ import { INITIAL_Z_INDEX, WINDOW_CONFIG } from "#constants";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
+const createWindowConfig = () => ({
+  isOpen: false,
+  zIndex: INITIAL_Z_INDEX,
+  data: null,
+  isMinimized: false,
+  isMaximized: false,
+  maximizeData: null,
+  positionX: 0,
+  positionY: 0,
+  width: 0,
+  height: 0,
+});
+
 const useWindowStore = create(
   immer((set) => ({
     windows: WINDOW_CONFIG,
@@ -11,14 +24,27 @@ const useWindowStore = create(
     // Open a window
     openWindow: (windowKey, data = null) =>
       set((state) => {
+        // Create the window if it doesn't exist (for dynamic windows like img_1, img_2, etc.)
+        if (!state.windows[windowKey]) {
+          state.windows[windowKey] = createWindowConfig();
+        }
+        
         const win = state.windows[windowKey];
-        if (!win) return;
+        // Always update data if provided (allows changing image while window is open)
+        if (data !== null) {
+          win.data = data;
+        }
+        // If window is already open, just focus it (bring to front)
+        if (win.isOpen) {
+          win.zIndex = state.nextZIndex++;
+          return;
+        }
+        // Otherwise open it with top z-index
         win.isOpen = true;
-        win.zIndex = state.nextZIndex;
-        win.data = data ?? win.data;
+        win.zIndex = state.nextZIndex++;
+        win.data = win.data || data;
         win.isMinimized = false;
         win.isMaximized = false;
-        state.nextZIndex++;
         // Remove from minimized if it was minimized
         state.minimizedWindows = state.minimizedWindows.filter(w => w !== windowKey);
       }),
