@@ -19,9 +19,9 @@ const DesktopEntrance = ({ isVisible, children }) => {
       const home = contentRef.current.querySelector("[class*='home']");
 
       // Set initial hidden states
-      if (navbar) gsap.set(navbar, { opacity: 0, y: -30 });
-      if (welcome) gsap.set(welcome, { opacity: 0, scale: 0.95 });
-      if (dock) gsap.set(dock, { opacity: 0, y: 50 });
+      if (navbar) gsap.set(navbar, { opacity: 0, y: -40 });
+      if (welcome) gsap.set(welcome, { opacity: 0, scale: 0.92 });
+      if (dock) gsap.set(dock, { opacity: 0, y: 60 });
       if (windows.length > 0) gsap.set(windows, { opacity: 0, scale: 0.9, y: 20 });
       if (home) gsap.set(home, { opacity: 0 });
     }
@@ -49,33 +49,33 @@ const DesktopEntrance = ({ isVisible, children }) => {
       "[class*='window'], [class*='finder'], [class*='safari'], [class*='terminal']"
     );
 
-    // Navbar slides down from top
+    // Navbar slides down from top with smooth easing
     if (navbar) {
       tl.fromTo(
         navbar,
-        { opacity: 0, y: -30 },
-        { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.2)" },
+        { opacity: 0, y: -40 },
+        { opacity: 1, y: 0, duration: 0.9, ease: "cubic.out" },
+        0.1
+      );
+    }
+
+    // Welcome section fades and scales up smoothly
+    if (welcome) {
+      tl.fromTo(
+        welcome,
+        { opacity: 0, scale: 0.92 },
+        { opacity: 1, scale: 1, duration: 0.9, ease: "elastic.out(1, 0.5)" },
         0.2
       );
     }
 
-    // Welcome section fades and scales up
-    if (welcome) {
-      tl.fromTo(
-        welcome,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.1)" },
-        0.3
-      );
-    }
-
-    // Dock slides up from bottom with bounce
+    // Dock slides up from bottom with ultra-smooth easing
     if (dock) {
       tl.fromTo(
         dock,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.3)" },
-        0.5
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 1, ease: "cubic.out" },
+        0.3
       );
     }
 

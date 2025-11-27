@@ -17,25 +17,26 @@ const LoadingScreen = ({ onComplete }) => {
     const tl = gsap.timeline();
     let loadingProgress = 0;
 
-    // Create floating particles with gradient colors
+    // Create floating particles with gradient colors - dark theme
     const particleCount = 25;
     const colors = [
-      "from-violet-300 to-purple-400",
-      "from-fuchsia-300 to-pink-400",
-      "from-purple-300 to-violet-400",
-      "from-pink-300 to-rose-400",
+      "from-cyan-300 to-blue-400",
+      "from-blue-300 to-purple-400",
+      "from-purple-300 to-indigo-400",
+      "from-cyan-300 to-indigo-400",
     ];
     
     const particlesHTML = Array.from({ length: particleCount })
       .map(
         (_, i) => `
-      <div class="absolute rounded-full bg-gradient-to-br ${colors[i % colors.length]} opacity-50 blur-sm"
+      <div class="absolute rounded-full bg-gradient-to-br ${colors[i % colors.length]} opacity-60 blur-sm"
         style="
           left: ${Math.random() * 100}%; 
           top: ${Math.random() * 100}%;
           width: ${Math.random() * 8 + 3}px;
           height: ${Math.random() * 8 + 3}px;
           filter: blur(${Math.random() * 2}px);
+          box-shadow: 0 0 ${Math.random() * 8 + 4}px currentColor;
         "></div>
     `
       )
@@ -224,17 +225,34 @@ const LoadingScreen = ({ onComplete }) => {
           style={{ perspective: "1000px" }}
         >
           {/* Outer Orbit Ring 1 */}
-          <div className="absolute inset-0 rounded-full border-2 border-violet-300/50"></div>
+          <div className="absolute inset-0 rounded-full border-2 border-cyan-300/70 shadow-lg shadow-cyan-400/40"></div>
 
           {/* Outer Orbit Ring 2 */}
-          <div className="absolute inset-4 rounded-full border border-pink-300/40"></div>
+          <div className="absolute inset-4 rounded-full border border-blue-300/60 shadow-md shadow-blue-400/30"></div>
 
           {/* Rotating Orbit Elements */}
           <div className="absolute w-full h-full">
-            <div className="absolute top-0 left-1/2 w-3 h-3 -translate-x-1/2 bg-linear-to-br from-pink-400 to-purple-500 rounded-full shadow-lg shadow-pink-400/60"></div>
-            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 -translate-y-1 translate-x-1 bg-violet-400 rounded-full opacity-70 shadow-md shadow-violet-400/40"></div>
-            <div className="absolute top-1/2 right-0 w-2 h-2 translate-x-1 -translate-y-1/2 bg-fuchsia-400 rounded-full opacity-60 shadow-md shadow-fuchsia-400/40"></div>
-            <div className="absolute bottom-1/4 left-0 w-2.5 h-2.5 -translate-x-1 bg-pink-300 rounded-full opacity-70 shadow-md shadow-pink-300/40"></div>
+            <div className="absolute top-0 left-1/2 w-3 h-3 -translate-x-1/2 bg-linear-to-br from-cyan-300 to-blue-500 rounded-full shadow-lg shadow-cyan-400/70"></div>
+            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 -translate-y-1 translate-x-1 bg-blue-400 rounded-full opacity-80 shadow-md shadow-blue-400/60"></div>
+            <div className="absolute top-1/2 right-0 w-2 h-2 translate-x-1 -translate-y-1/2 bg-purple-400 rounded-full opacity-70 shadow-md shadow-purple-400/50"></div>
+            <div className="absolute bottom-1/4 left-0 w-2.5 h-2.5 -translate-x-1 bg-cyan-300 rounded-full opacity-80 shadow-md shadow-cyan-300/50"></div>
+          </div>
+
+          {/* Profile Icon - Rotating with orbit */}
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <div className="w-36 h-36 rounded-full border-2 border-cyan-400/80 shadow-2xl shadow-cyan-400/50 flex items-center justify-center relative overflow-hidden">
+              {/* Dark wallpaper background image */}
+              <div 
+                className="absolute inset-0 rounded-full"
+                style={{
+                  backgroundImage: "url('/images/darkwallpaper.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center"
+                }}
+              ></div>
+              {/* Overlay glow effect */}
+              <div className="absolute inset-0 bg-linear-to-br from-cyan-400/10 via-blue-500/5 to-purple-600/5"></div>
+            </div>
           </div>
 
           {/* Main Logo */}
@@ -278,24 +296,24 @@ const LoadingScreen = ({ onComplete }) => {
         {/* Progress Section */}
         <div className="w-96 space-y-5 mt-6">
           {/* Progress Bar Container */}
-          <div className="relative h-2.5 bg-linear-to-r from-purple-100 to-pink-100 rounded-full overflow-hidden border border-violet-200/60 shadow-md">
+          <div className="relative h-2.5 bg-linear-to-r from-purple-200/60 to-pink-200/60 rounded-full overflow-hidden border border-purple-300/50 shadow-md backdrop-blur-sm">
             {/* Animated Background Shimmer */}
-            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent opacity-50"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-50"></div>
 
             {/* Progress Fill */}
             <div
               ref={progressBarRef}
-              className="h-full bg-linear-to-r from-purple-500 via-pink-500 to-violet-500 origin-left shadow-lg shadow-pink-400/70 relative overflow-hidden rounded-full"
+              className="h-full bg-linear-to-r from-purple-500 via-pink-500 to-violet-600 origin-left shadow-lg shadow-purple-500/80 relative overflow-hidden rounded-full"
               style={{ transformOrigin: "left" }}
             >
               {/* Shine Effect */}
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent animate-pulse"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent animate-pulse"></div>
             </div>
           </div>
 
           {/* Progress Stats */}
           <div className="flex justify-between items-center px-2">
-            <div className="text-xs font-semibold text-purple-600/80 tracking-widest">
+            <div className="text-xs font-semibold text-purple-600/90 tracking-widest">
               INITIALIZING
             </div>
             <span
@@ -311,24 +329,24 @@ const LoadingScreen = ({ onComplete }) => {
         <div className="mt-8 space-y-3">
           <div className="text-center">
             <div className="inline-flex items-center gap-3">
-              <span className="text-sm text-violet-600 font-bold tracking-wider">
+              <span className="text-sm text-purple-600 font-bold tracking-wider">
                 LOADING
               </span>
               <div className="flex gap-1.5">
                 <span
-                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-400 to-pink-500"
+                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-500 to-pink-500"
                   style={{
                     animation: "bounce 1.2s infinite",
                   }}
                 ></span>
                 <span
-                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-400 to-pink-500"
+                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-500 to-pink-500"
                   style={{
                     animation: "bounce 1.2s infinite 0.2s",
                   }}
                 ></span>
                 <span
-                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-400 to-pink-500"
+                  className="w-2 h-2 rounded-full bg-linear-to-br from-purple-500 to-pink-500"
                   style={{
                     animation: "bounce 1.2s infinite 0.4s",
                   }}
@@ -336,7 +354,7 @@ const LoadingScreen = ({ onComplete }) => {
               </div>
             </div>
           </div>
-          <div className="text-center text-xs text-violet-500/70 font-medium tracking-wider">
+          <div className="text-center text-xs text-purple-600/80 font-medium tracking-wider">
             Preparing your portfolio experience...
           </div>
         </div>
