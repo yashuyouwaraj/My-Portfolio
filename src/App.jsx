@@ -16,25 +16,19 @@ const App = () => {
     document.body.style.backgroundImage = `url('${bgImage}')`
   }, [isDarkMode, lightBg, darkBg])
 
-  useEffect(() => {
-    // Loading screen duration
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 4000)
-
-    return () => clearTimeout(timer)
-  }, [])
+  const handleLoadingComplete = () => {
+    setIsLoading(false)
+  }
 
   return (
     <main>
       {isLoading && (
         <LoadingScreen 
-          onComplete={() => {
-            setIsLoading(false)
-          }} 
+          onComplete={handleLoadingComplete}
         />
       )}
       
+      {/* Desktop content loads in background during loading screen */}
       <DesktopEntrance isVisible={!isLoading}>
         <Navbar />
         <Welcome />

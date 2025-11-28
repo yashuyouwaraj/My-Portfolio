@@ -3,12 +3,13 @@ import gsap from "gsap";
 
 const DesktopEntrance = ({ isVisible, children }) => {
   const contentRef = useRef(null);
+  const isPreloadingRef = useRef(!isVisible); // Track if we're preloading
 
-  // Initialize hidden state for all elements
+  // Initialize hidden state and preload all elements
   useEffect(() => {
-    if (contentRef.current && !isVisible) {
-      // Hide all content when not visible
-      gsap.set(contentRef.current, { opacity: 0 });
+    if (contentRef.current) {
+      // Always hide content initially (whether preloading or after loading)
+      gsap.set(contentRef.current, { opacity: 0, pointerEvents: isVisible ? "auto" : "none" });
       
       const navbar = contentRef.current.querySelector("nav");
       const welcome = contentRef.current.querySelector("[class*='welcome']");
@@ -18,27 +19,39 @@ const DesktopEntrance = ({ isVisible, children }) => {
       );
       const home = contentRef.current.querySelector("[class*='home']");
 
-      // Set initial hidden states
+      // Set initial hidden states - this allows React to render components in background
       if (navbar) gsap.set(navbar, { opacity: 0, y: -40 });
       if (welcome) gsap.set(welcome, { opacity: 0, scale: 0.92 });
       if (dock) gsap.set(dock, { opacity: 0, y: 60 });
       if (windows.length > 0) gsap.set(windows, { opacity: 0, scale: 0.9, y: 20 });
       if (home) gsap.set(home, { opacity: 0 });
     }
-  }, [isVisible]);
+  }, []);
 
   useEffect(() => {
-    if (!isVisible || !contentRef.current) return;
+    if (!contentRef.current) return;
 
-    // Start animation immediately - loading screen fade out happens at 3.5s
-    // This gives perfect sync with loading screen completion
+    // Update preloading state
+    isPreloadingRef.current = !isVisible;
+
+    if (!isVisible) {
+      // While preloading (loading screen still active)
+      gsap.to(contentRef.current, {
+        opacity: 0,
+        pointerEvents: "none",
+        duration: 0.1,
+      });
+      return;
+    }
+
+    // When visible, start smooth transition animations
     const tl = gsap.timeline();
 
-    // Fade in the main content
+    // Fade in the main content container
     tl.fromTo(
       contentRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.7, ease: "power2.out" }
+      { opacity: 0, pointerEvents: "none" },
+      { opacity: 1, pointerEvents: "auto", duration: 0.6, ease: "power2.out" }
     );
 
     // Stagger animation for main components
@@ -54,8 +67,8 @@ const DesktopEntrance = ({ isVisible, children }) => {
       tl.fromTo(
         navbar,
         { opacity: 0, y: -40 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "cubic.out" },
-        0.1
+        { opacity: 1, y: 0, duration: 0.8, ease: "cubic.out" },
+        0.15
       );
     }
 
@@ -64,7 +77,7 @@ const DesktopEntrance = ({ isVisible, children }) => {
       tl.fromTo(
         welcome,
         { opacity: 0, scale: 0.92 },
-        { opacity: 1, scale: 1, duration: 0.9, ease: "elastic.out(1, 0.5)" },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "elastic.out(1, 0.5)" },
         0.2
       );
     }
@@ -74,7 +87,7 @@ const DesktopEntrance = ({ isVisible, children }) => {
       tl.fromTo(
         dock,
         { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 1, ease: "cubic.out" },
+        { opacity: 1, y: 0, duration: 0.9, ease: "cubic.out" },
         0.3
       );
     }
@@ -92,7 +105,7 @@ const DesktopEntrance = ({ isVisible, children }) => {
           ease: "back.out(1)",
           stagger: 0.08,
         },
-        0.6
+        0.5
       );
     }
 
@@ -103,7 +116,7 @@ const DesktopEntrance = ({ isVisible, children }) => {
         home,
         { opacity: 0 },
         { opacity: 1, duration: 0.5, ease: "power2.out" },
-        0.8
+        0.7
       );
     }
 
@@ -113,7 +126,7 @@ const DesktopEntrance = ({ isVisible, children }) => {
   }, [isVisible]);
 
   return (
-    <div ref={contentRef} style={{ display: isVisible ? "block" : "none" }}>
+    <div ref={contentRef} style={{ opacity: 0, pointerEvents: "none" }}>
       {children}
     </div>
   );
