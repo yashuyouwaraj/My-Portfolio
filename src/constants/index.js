@@ -496,7 +496,6 @@ const ABOUT_LOCATION = {
       description: [
         "Hey! I’m Yashu 👋, a web developer who enjoys building sleek, interactive websites that actually work well.",
         "I specialize in JavaScript, React, Next.js, Node.js, MongoDB, PostgresSQL—and I love making things feel smooth, fast, and just a little bit delightful.",
-        "I’m big on clean UI, good UX, and writing code that doesn’t need a search party to debug.",
       ],
     },
   ],
