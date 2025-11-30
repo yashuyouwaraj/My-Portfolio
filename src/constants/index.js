@@ -731,6 +731,13 @@ const achievementsByCategory = {
       dateEarned: "Nov 17, 2022",
       icon: "📜",
     },
+    {
+      id: 6,
+      name: "Python (Basic)",
+      file: "Python_Hackerrank.pdf",
+      dateEarned: "Nov 24, 2022",
+      icon: "📜",
+    },
   ],
   publications: [
     {
